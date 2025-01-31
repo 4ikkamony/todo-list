@@ -115,16 +115,13 @@ class TaskUpdateViewTest(TestCase):
     def setUp(self):
         self.task = Task.objects.create(
             content="Intitial task content",
-            deadline=timezone.now() + timezone.timedelta(days=1)
+            deadline=timezone.now() + timezone.timedelta(days=1),
         )
         self.initial_deadline = self.task.deadline
 
     def test_update_task_valid_data(self):
         response = self.client.post(
-            reverse(
-                "todo:task-update",
-                kwargs={"pk": self.task.id}
-            ),
+            reverse("todo:task-update", kwargs={"pk": self.task.id}),
             {"content": "New task content"},
         )
 
@@ -132,19 +129,14 @@ class TaskUpdateViewTest(TestCase):
 
         self.assertEqual(response.status_code, 302)
 
-        self.assertEqual(
-            Task.objects.get(id=self.task.id).content, "New task content"
-        )
+        self.assertEqual(Task.objects.get(id=self.task.id).content, "New task content")
 
     def test_update_task_invalid_deadline(self):
         response = self.client.post(
-            reverse(
-                "todo:task-update",
-                kwargs={"pk": self.task.id}
-            ),
+            reverse("todo:task-update", kwargs={"pk": self.task.id}),
             {
                 "content": "New task content",
-                "deadline": self.initial_deadline - timezone.timedelta(days=5)
+                "deadline": self.initial_deadline - timezone.timedelta(days=5),
             },
         )
 
@@ -153,8 +145,7 @@ class TaskUpdateViewTest(TestCase):
         Task.objects.get(id=self.task.id).refresh_from_db()
 
         self.assertEqual(
-            Task.objects.get(id=self.task.id).deadline,
-            self.initial_deadline
+            Task.objects.get(id=self.task.id).deadline, self.initial_deadline
         )
 
 
@@ -173,6 +164,4 @@ class TaskDeleteViewTest(TestCase):
 
         self.assertEqual(response.status_code, 302)
 
-        self.assertFalse(
-            Task.objects.filter(id=task.id).exists()
-        )
+        self.assertFalse(Task.objects.filter(id=task.id).exists())
