@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block header %}
+  <div class="row">
+    <div class="container bg-dark text-white text-center mb-2 p-2">
+      <div class="d-flex justify-content-between">
+        <h1>Tag List</h1>
+        <a href="{% url 'todo:tag-create' %}" class="d-flex align-items-center btn btn-primary">Add Tag</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Update</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for tag in tag_list %}
+      <tr>
+        <td>{{ tag.name|capfirst }}</td>
+        <td><a href="{% url 'todo:tag-update' pk=tag.id %}" style="text-decoration-line: none">Update</a></td>
+        <td><a href="{% url 'todo:tag-delete' pk=tag.id %}" style="text-decoration-line: none">Delete</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

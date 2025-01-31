@@ -5,7 +5,7 @@
     <div class="container bg-dark text-white text-center mb-2 p-2">
       <div class="d-flex justify-content-between">
         <h1>Task List</h1>
-        <a href="#" class="d-flex align-items-center btn btn-primary">Add Task</a>
+        <a href="{% url 'todo:task-create' %}" class="d-flex align-items-center btn btn-primary">Add Task</a>
       </div>
     </div>
   </div>
@@ -13,6 +13,51 @@
 
 {% block content %}
   {% for task in task_list %}
-    <p>{{ task }}</p>
+    <div class="card mb-4">
+      <div class="card-body {{ task.is_done|yesno:'task-done-border,task-not-done-border' }}">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            {% if task.is_done %}
+              <p class="badge bg-success">Done</p>
+            {% else %}
+              <p class="badge bg-danger">Not done</p>
+            {% endif %}
+            <h5 class="card-title ms-2">{{ task.content|truncatewords:4 }}</h5>
+          </div>
+          <form action="{% url 'todo:task-toggle-status' pk=task.id %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn {{ task.is_done|yesno:'btn-outline-dark,btn-light' }}">
+              <em>{{ task.is_done|yesno:'Undo,Complete'}}</em>
+            </button>
+          </form>
+        </div>
+        {% if task.deadline is not None %}
+          <h6 class="card-subtitle mb-2">Deadline: <span class="badge {{ task.is_done|yesno:'bg-light text-muted,bg-warning' }} text-dark">{{ task.deadline|time:"H:i" }}<br>{{ task.deadline|date:"d-M-Y" }}</span></h6>
+        {% endif %}
+        <hr>
+        <p class="card-text">{{ task.content|linebreaksbr }}</p>
+        <div class="mt-2 mb-2 d-flex justify-content-between">
+          {% if task.tags.exists %}
+            <div style="max-width: 75%">
+              <span><strong>Tags</strong> </span>
+              {% for tag in task.tags.all %}
+                <span class="badge bg-secondary">{{ tag.name|lower }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            <span><strong>No Tags</strong> </span>
+          {% endif %}
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between">
+          <p class="text-muted">Created: {{ task.created_at|date:"d-M-Y, H:i" }}</p>
+          <div>
+            <a href="{% url 'todo:task-update' pk=task.id %}" class="btn btn-outline-primary card-link">Update</a>
+            <a href="{% url 'todo:task-delete' pk=task.id %}" class="btn btn-outline-danger card-link"> Delete </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   {% endfor %}
 {% endblock %}

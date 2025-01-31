@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block header %}
+  <div class="row">
+    <div class="container bg-dark text-white text-center mb-2 p-2">
+      <div class="d-flex justify-content-between">
+        <h1>{{ object|yesno:"Update,Create" }} tag</h1>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <form action="" method="post" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+
+    <input type="submit" value="Submit" class="btn btn-primary">
+    <a href="{% url 'todo:tag-list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}
