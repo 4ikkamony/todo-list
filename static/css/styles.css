@@ -1,0 +1,7 @@
+.task-done-border {
+    border: ridge green;
+}
+
+.task-not-done-border {
+    border: ridge red;
+}
