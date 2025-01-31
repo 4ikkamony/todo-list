@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div id="sidebar" class="sidebar-nav list-group d-flex flex-column flex-shrink-0 p-2 text-white bg-dark sticky-top">
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="{% url 'todo:task-list' %}" class="nav-link text-white {% if request.path == '/' %}active{% endif %}">
+          &#127968;
+          Home
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'todo:tag-list' %}" class="nav-link text-white {% if request.path == '/tags/' %}active{% endif %}">
+          &#127991;
+          All Tags
+        </a>
+      </li>
+    </ul>
+  </div>
