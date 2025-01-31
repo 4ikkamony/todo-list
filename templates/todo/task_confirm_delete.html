@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 
+{% block header %}
+  <div class="row">
+    <div class="container bg-dark text-white text-center mb-2 p-2">
+      <div class="d-flex justify-content-between">
+        <h1>Confirm deletion of Task</h1>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
 {% block content %}
-  <h1>Confirm deletion of Task:</h1>
+  <p>Task description:</p>
   <p>{{ task.content|linebreaks }}</p>
   <form action="" method="post">
     {% csrf_token %}
